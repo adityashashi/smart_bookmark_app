@@ -113,10 +113,24 @@ export function BookmarksDashboard({ userId, userEmail, initialBookmarks }: Prop
 
     const deleteBookmark = async (id: string) => {
         setError(null);
-        const { error: deleteError } = await supabase.from("bookmarks").delete().eq("id", id);
+        const { data: deletedRows, error: deleteError } = await supabase
+            .from("bookmarks")
+            .delete()
+            .eq("id", id)
+            .eq("user_id", userId)
+            .select("id");
+
         if (deleteError) {
             setError(deleteError.message);
+            return;
         }
+
+        if (!deletedRows || deletedRows.length === 0) {
+            setError("Delete was blocked. Re-run SQL policies, then try deleting bookmarks created after policy setup.");
+            return;
+        }
+
+        setBookmarks((current) => current.filter((item) => item.id !== id));
     };
 
     const signOut = async () => {
