@@ -99,7 +99,7 @@ export function BookmarksDashboard({ userId, userEmail, initialBookmarks }: Prop
         setIsSaving(true);
         const { error: insertError } = await supabase
             .from("bookmarks")
-            .insert({ title: nextTitle, url: nextUrl });
+            .insert({ title: nextTitle, url: nextUrl, user_id: userId });
         setIsSaving(false);
 
         if (insertError) {
@@ -126,56 +126,56 @@ export function BookmarksDashboard({ userId, userEmail, initialBookmarks }: Prop
 
     return (
         <section className="space-y-6">
-            <header className="flex flex-col gap-3 rounded-xl border border-black/10 p-5 sm:flex-row sm:items-center sm:justify-between">
+            <header className="flex flex-col gap-3 rounded-xl border border-foreground/15 p-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h1 className="text-2xl font-semibold">Smart Bookmark App</h1>
-                    <p className="text-sm text-black/70">Signed in as {userEmail}</p>
+                    <p className="text-sm text-foreground/70">Signed in as {userEmail}</p>
                 </div>
                 <button
                     type="button"
                     onClick={signOut}
-                    className="w-fit rounded-md border border-black/20 px-3 py-2 text-sm"
+                    className="w-fit rounded-md border border-foreground/25 px-3 py-2 text-sm"
                 >
                     Sign out
                 </button>
             </header>
 
-            <form onSubmit={addBookmark} className="space-y-3 rounded-xl border border-black/10 p-5">
+            <form onSubmit={addBookmark} className="space-y-3 rounded-xl border border-foreground/15 p-5">
                 <h2 className="text-lg font-medium">Add bookmark</h2>
                 <div className="grid gap-3 sm:grid-cols-2">
                     <input
                         value={title}
                         onChange={(event) => setTitle(event.target.value)}
                         placeholder="Title"
-                        className="rounded-md border border-black/20 px-3 py-2 text-sm"
+                        className="rounded-md border border-foreground/25 bg-background px-3 py-2 text-sm"
                     />
                     <input
                         value={url}
                         onChange={(event) => setUrl(event.target.value)}
                         placeholder="https://example.com"
-                        className="rounded-md border border-black/20 px-3 py-2 text-sm"
+                        className="rounded-md border border-foreground/25 bg-background px-3 py-2 text-sm"
                     />
                 </div>
                 <button
                     type="submit"
                     disabled={isSaving}
-                    className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
+                    className="rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background disabled:cursor-not-allowed disabled:opacity-60"
                 >
                     {isSaving ? "Saving..." : "Add"}
                 </button>
                 {error ? <p className="text-sm text-red-600">{error}</p> : null}
             </form>
 
-            <div className="rounded-xl border border-black/10 p-5">
+            <div className="rounded-xl border border-foreground/15 p-5">
                 <h2 className="mb-3 text-lg font-medium">My bookmarks</h2>
                 {bookmarks.length === 0 ? (
-                    <p className="text-sm text-black/70">No bookmarks yet.</p>
+                    <p className="text-sm text-foreground/70">No bookmarks yet.</p>
                 ) : (
                     <ul className="space-y-2">
                         {bookmarks.map((bookmark) => (
                             <li
                                 key={bookmark.id}
-                                className="flex flex-col gap-2 rounded-md border border-black/10 p-3 sm:flex-row sm:items-center sm:justify-between"
+                                className="flex flex-col gap-2 rounded-md border border-foreground/15 p-3 sm:flex-row sm:items-center sm:justify-between"
                             >
                                 <div>
                                     <p className="font-medium">{bookmark.title}</p>
@@ -191,7 +191,7 @@ export function BookmarksDashboard({ userId, userEmail, initialBookmarks }: Prop
                                 <button
                                     type="button"
                                     onClick={() => deleteBookmark(bookmark.id)}
-                                    className="w-fit rounded-md border border-black/20 px-3 py-1.5 text-sm"
+                                    className="w-fit rounded-md border border-foreground/25 px-3 py-1.5 text-sm"
                                 >
                                     Delete
                                 </button>
